@@ -1,104 +1,266 @@
-/* CSS Variables for Theme Management */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  /* Ocean Professional Theme */
+  --color-primary: #2563EB;  /* blue */
+  --color-secondary: #F59E0B; /* amber */
+  --color-error: #EF4444;     /* red */
+  --color-bg: #f9fafb;        /* background */
+  --color-surface: #ffffff;   /* cards/surface */
+  --color-text: #111827;      /* near-black */
+  --color-muted: #6b7280;     /* gray-500 */
+
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 6px 16px rgba(0,0,0,0.08);
+
+  --transition: 180ms ease;
 }
 
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
 }
 
-.App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* App shell */
+.app-shell {
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 16px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app-header {
+  text-align: center;
+  padding: 24px 16px 8px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.app-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.app-subtitle {
+  margin: 6px 0 0;
+  color: var(--color-muted);
+  font-size: 14px;
+}
+
+/* Main layout */
+.app-main {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.game-area {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  width: 100%;
+  max-width: 860px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .game-area {
+    grid-template-columns: 1fr;
+    max-width: 560px;
   }
 }
 
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+/* Status */
+.ttt-status {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto 8px;
+  display: grid;
+  gap: 4px;
+  text-align: center;
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+.ttt-status__primary {
+  font-weight: 700;
+  font-size: 18px;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
+.ttt-status__secondary {
+  color: var(--color-muted);
   font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.theme-toggle:hover {
+/* Board */
+.ttt-board {
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  background: linear-gradient(180deg, rgba(37,99,235,0.06), rgba(243,244,246,0.7));
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm) inset;
+}
+
+.ttt-board__row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.ttt-board__cell {
+  aspect-ratio: 1 / 1;
+}
+
+/* Square */
+.ttt-square {
+  width: 100%;
+  height: 100%;
+  background: var(--color-surface);
+  border: 2px solid rgba(17,24,39,0.08);
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
+  font-weight: 800;
+  font-size: clamp(24px, 6vw, 48px);
+  color: var(--color-text);
+  user-select: none;
+}
+
+.ttt-square:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 20px rgba(37,99,235,0.12);
+  border-color: rgba(37,99,235,0.4);
+}
+
+.ttt-square:focus-visible {
+  outline: 3px solid rgba(37,99,235,0.5);
+  outline-offset: 2px;
+}
+
+.ttt-square:disabled {
+  cursor: not-allowed;
   opacity: 0.9;
 }
 
-.theme-toggle:active {
-  transform: translateY(0);
+.ttt-square--filled .ttt-square__value {
+  color: var(--color-primary);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.ttt-square--win {
+  background: linear-gradient(180deg, rgba(37,99,235,0.1), rgba(245,158,11,0.08));
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(245,158,11,0.35);
 }
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
-  }
+/* Controls */
+.ttt-controls {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.ttt-controls__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ttt-controls__history {
+  background: linear-gradient(180deg, rgba(37,99,235,0.05), rgba(255,255,255,0.9));
+  border: 1px solid rgba(17,24,39,0.06);
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+
+.ttt-controls__history-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.ttt-controls__history-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+/* Buttons */
+.btn {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(37,99,235,0.5);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  box-shadow: 0 10px 24px rgba(37,99,235,0.25);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(37,99,235,0.28);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--color-text);
+  border-color: rgba(17,24,39,0.12);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--color-secondary);
+  box-shadow: 0 8px 18px rgba(245,158,11,0.16);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text);
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.btn-ghost:hover {
+  background: rgba(37,99,235,0.08);
+}
+
+.btn-ghost--active {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37,99,235,0.25);
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 12px 16px 24px;
+  color: var(--color-muted);
 }
